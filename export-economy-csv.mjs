@@ -41,6 +41,13 @@ function parseNumber(str) {
     return num;
 }
 
+const cleanBsp = (text) => {
+  if (!text) {
+    return "";
+  }
+  return text.replace(/\&nbsp;/g, "");
+}
+
 async function run() {
   try {
     await client.connect();
@@ -111,6 +118,7 @@ async function run() {
 
       let countryName = doc?.Government?.["Country name"]?.["conventional short form"]?.text;
       countryName = cleanData(countryName);
+      countryName = cleanBsp(countryName);
 
       const country = doc?.id;
       console.log(countryName);
