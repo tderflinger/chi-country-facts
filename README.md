@@ -28,6 +28,22 @@ node loader.mjs
 The loader application will load the data from the factbook.json project into your MongoDB database.
 Then you can query all of the data from the World Factbook via the MongoDB API.
 
+## Exporting Data
+
+Once the data is loaded in the MongoDB database you can export the data to a JSON file using the following command:
+
+```bash
+node export.mjs
+```
+
+There is also the possibility to export, clean and normalize some data about the economy of the countries using the following command:
+
+```bash
+node export-economy.mjs
+```
+
+The resulting file is a CSV file (countries-economy.csv) which can be further analyzed, for example using Excel or Pandas.
+
 ## License
 
 MIT License
