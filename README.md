@@ -9,7 +9,10 @@ project as the source of the data.
 
 ## Preliminaries
 
-You need an installation of MongoDB to use this project.
+You need an installation of MongoDB to use this project. Once possibility is to install MongoDB locally on your machine with Docker:
+[https://hub.docker.com/_/mongo](https://hub.docker.com/_/mongo)
+
+There also exist hosted versions of MongoDB on major cloud providers.
 
 ## Installation
 
