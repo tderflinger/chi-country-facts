@@ -54,8 +54,8 @@ const cleanBsp = (text) => {
   return text.replace(/\&nbsp;/g, "");
 };
 
-const getData = (doc, level1, level2) => {
-  return cleanData(doc?.Economy?.[level1]?.[level2]?.text);
+const getData = (doc, level1, level2 = null) => {
+  return cleanData(level2 ? doc?.Economy?.[level1]?.[level2]?.text : doc?.Economy?.[level1]?.text);
 }
 
 async function run() {
@@ -68,7 +68,7 @@ async function run() {
     const cursor = collection.find();
 
     let csvData =
-      "Country;Country Name;Real GDP (purchasing power parity) 2021 [USD];Real GDP (purchasing power parity) 2020 [USD];Real GDP (purchasing power parity) 2019 [USD];Real GDP Growth Rate 2021 [%];Real GDP Growth Rate 2020 [%];Real GDP Growth Rate 2019 [%];Real GDP per capita 2022 [USD];Real GDP per capita 2021 [USD];Inflation rate (consumer prices) 2020 [%];Fitch Rating;GDP Composition Agro;GDP Composition Industry;GDP Composition Services;Unemployment Rate 2021;Budget Revenue\n";
+      "Country;Country Name;Real GDP (purchasing power parity) 2021 [USD];Real GDP (purchasing power parity) 2020 [USD];Real GDP (purchasing power parity) 2019 [USD];Real GDP Growth Rate 2021 [%];Real GDP Growth Rate 2020 [%];Real GDP Growth Rate 2019 [%];Real GDP per capita 2022 [USD];Real GDP per capita 2021 [USD];Inflation rate (consumer prices) 2020 [%];Fitch Rating;GDP Composition Agro;GDP Composition Industry;GDP Composition Services;Unemployment Rate 2021;Budget Revenue;Budget Expenditures;Exports 2020;Population below Poverty Line\n";
 
     // Print each document
     for await (const doc of cursor) {
@@ -120,6 +120,17 @@ async function run() {
       budgetRevenue = budgetRevenue.replace(/\$/g, "");
       budgetRevenue = parseNumber(budgetRevenue);
 
+      let budgetExpenditures = getData(doc, "Budget", "expenditures");
+      budgetExpenditures = budgetExpenditures.replace(/\$/g, "");
+      budgetExpenditures = parseNumber(budgetExpenditures);
+
+      let exports2020 = getData(doc, "Exports", "Exports 2020");
+      exports2020 = exports2020.replace(/\$/g, "");
+      exports2020 = parseNumber(exports2020);
+
+      let populationBelowPovery = getData(doc, "Population below poverty line");
+      populationBelowPovery = populationBelowPovery.replace(/%/g, "");
+
       let countryName =
         doc?.Government?.["Country name"]?.["conventional short form"]?.text;
       countryName = cleanData(countryName);
@@ -129,7 +140,7 @@ async function run() {
       console.log(countryName);
       console.log(doc?.id);
       // Append the data to the CSV string
-      csvData += `${country};${countryName};${realGDPPP2021};${realGDPPP2020};${realGDPPP2019};${realGDPGrowthRate2021};${realGDPGrowthRate2020};${realGDPGrowthRate2019};${realGDPCapita2022};${realGDPCapita2021};${inflationRate2020};${fitchRating};${gdpCompositionAgro};${gdpCompositionIndustry};${gdpCompositionServices};${unemploymentRate};${budgetRevenue}\n`;
+      csvData += `${country};${countryName};${realGDPPP2021};${realGDPPP2020};${realGDPPP2019};${realGDPGrowthRate2021};${realGDPGrowthRate2020};${realGDPGrowthRate2019};${realGDPCapita2022};${realGDPCapita2021};${inflationRate2020};${fitchRating};${gdpCompositionAgro};${gdpCompositionIndustry};${gdpCompositionServices};${unemploymentRate};${budgetRevenue};${budgetExpenditures};${exports2020};${populationBelowPovery}\n`;
     }
     // Write the CSV data to a file
     await fs.writeFile("countries-economy.csv", csvData);

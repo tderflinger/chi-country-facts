@@ -9,7 +9,7 @@ project as the source of the data.
 
 ## Preliminaries
 
-You need an installation of MongoDB to use this project. Once possibility is to install MongoDB locally on your machine with Docker:
+You need an installation of MongoDB to use this project. One possibility is to install MongoDB locally on your machine with Docker:
 [https://hub.docker.com/_/mongo](https://hub.docker.com/_/mongo)
 
 There also exist hosted versions of MongoDB on major cloud providers.
@@ -17,6 +17,12 @@ There also exist hosted versions of MongoDB on major cloud providers.
 ## Installation
 
 Clone the [https://github.com/factbook/factbook.json](https://github.com/factbook/factbook.json) project into the same directory as this project.
+
+Run the folling command to install the JavaScript dependencies:
+
+```bash
+npm install
+```
 
 ## Loader Usage
 
