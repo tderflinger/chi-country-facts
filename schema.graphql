@@ -2,12 +2,24 @@ type Country {
   id: ID!
   name: String!
   code: String!
+  internetCountryCode: String!
   economy: Economy
 }
 
 type Economy {
   realGDP2021: String!
   realGDP2020: String!
+  realGDP2019: String!
+  gdpGrowthRate2021: String!
+  gdpGrowthRate2020: String!
+  gdpGrowthRate2019: String!
+  fitchRating: String!
+  moodyRating: String!
+  standardAndPoorRating: String!
+  gdpPerCapita2021: String!
+  gdpPerCapita2020: String!
+  gdpPerCapita2019: String!
+
 }
 
 type Query {

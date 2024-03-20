@@ -9,11 +9,11 @@
   "author": "Thomas Derflinger",
   "license": "ISC",
   "dependencies": {
-    "@apollo/server": "^4.10.1",
-    "@graphql-tools/mock": "^9.0.2",
-    "@graphql-tools/schema": "^10.0.3",
-    "graphql": "^16.8.1",
-    "graphql-tag": "^2.12.6",
-    "mongodb": "^6.4.0"
+    "@apollo/server": "4.10.1",
+    "@graphql-tools/mock": "9.0.2",
+    "@graphql-tools/schema": "10.0.3",
+    "graphql": "16.8.1",
+    "graphql-tag": "2.12.6",
+    "mongodb": "6.4.0"
   }
 }
