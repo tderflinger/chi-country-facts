@@ -1,0 +1,16 @@
+type Country {
+  id: ID!
+  name: String!
+  code: String!
+  economy: Economy
+}
+
+type Economy {
+  realGDP2021: String!
+  realGDP2020: String!
+}
+
+type Query {
+  "Return country by id"
+  country: [Country!]!
+}

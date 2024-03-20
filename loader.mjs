@@ -1,7 +1,4 @@
 /*
-  Loads JSON files form factbook.json project into a Mongo database.
-*/
-/*
   Loads JSON files from factbook.json project into a Mongo database.
 */
 import { MongoClient } from "mongodb";

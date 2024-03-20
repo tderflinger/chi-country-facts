@@ -48,10 +48,20 @@ node export.mjs
 There is also the possibility to export, clean and normalize some data about the economy of the countries using the following command:
 
 ```bash
-node export-economy.mjs
+node export-economy-csv.mjs
 ```
 
 The resulting file is a CSV file (countries-economy.csv) which can be further analyzed, for example using Excel or Pandas.
+
+## Querying Data
+
+If you want to query data from the MongoDB database, you can use the example in `query.mjs`:
+
+```bash
+node query.mjs
+```
+
+Look into the source code of `query.mjs` to see how to query the data.
 
 ## License
 

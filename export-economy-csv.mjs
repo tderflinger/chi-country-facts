@@ -14,7 +14,7 @@ const cleanData = (text) => {
   return text.split("(")[0].trim();
 };
 
-function parseNumber(str) {
+const parseNumber = (str) => {
   if (!str) return "";
   if (str === "") return "";
 
@@ -58,7 +58,7 @@ const getData = (doc, level1, level2 = null) => {
   return cleanData(level2 ? doc?.Economy?.[level1]?.[level2]?.text : doc?.Economy?.[level1]?.text);
 }
 
-async function run() {
+const run = async () => {
   try {
     await client.connect();
     const database = client.db("CountryFacts");
@@ -128,8 +128,8 @@ async function run() {
       exports2020 = exports2020.replace(/\$/g, "");
       exports2020 = parseNumber(exports2020);
 
-      let populationBelowPovery = getData(doc, "Population below poverty line");
-      populationBelowPovery = populationBelowPovery.replace(/%/g, "");
+      let populationBelowPoverty = getData(doc, "Population below poverty line");
+      populationBelowPoverty = populationBelowPoverty.replace(/%/g, "");
 
       let countryName =
         doc?.Government?.["Country name"]?.["conventional short form"]?.text;
@@ -140,7 +140,7 @@ async function run() {
       console.log(countryName);
       console.log(doc?.id);
       // Append the data to the CSV string
-      csvData += `${country};${countryName};${realGDPPP2021};${realGDPPP2020};${realGDPPP2019};${realGDPGrowthRate2021};${realGDPGrowthRate2020};${realGDPGrowthRate2019};${realGDPCapita2022};${realGDPCapita2021};${inflationRate2020};${fitchRating};${gdpCompositionAgro};${gdpCompositionIndustry};${gdpCompositionServices};${unemploymentRate};${budgetRevenue};${budgetExpenditures};${exports2020};${populationBelowPovery}\n`;
+      csvData += `${country};${countryName};${realGDPPP2021};${realGDPPP2020};${realGDPPP2019};${realGDPGrowthRate2021};${realGDPGrowthRate2020};${realGDPGrowthRate2019};${realGDPCapita2022};${realGDPCapita2021};${inflationRate2020};${fitchRating};${gdpCompositionAgro};${gdpCompositionIndustry};${gdpCompositionServices};${unemploymentRate};${budgetRevenue};${budgetExpenditures};${exports2020};${populationBelowPoverty}\n`;
     }
     // Write the CSV data to a file
     await fs.writeFile("countries-economy.csv", csvData);
