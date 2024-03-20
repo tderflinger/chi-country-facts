@@ -1,4 +1,4 @@
-# country-facts
+# chi-country-facts
 
 This projects takes the JSON data from the World Factbook and loads it into a MongoDB database.
 Once loaded, you can query the country facts via the MongoDB API. This opens up possibilities to
@@ -6,6 +6,10 @@ learn about the countries of the world.
 
 This project uses the [https://github.com/factbook/factbook.json](https://github.com/factbook/factbook.json)
 project as the source of the data.
+
+## Why chi-country-facts
+
+In Swahili, "nchi" means country. Since this project is about the facts of countries, we chose the name "chi-country-facts".
 
 ## Preliminaries
 
