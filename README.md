@@ -1,7 +1,8 @@
 # chi-country-facts
 
 This projects takes the JSON data from the World Factbook and loads it into a MongoDB database.
-Once loaded, you can query the country facts via the MongoDB API. This opens up possibilities to
+Once loaded, you can query the country facts via the MongoDB API. 
+Additionally, there is a GraphQL API to query the data. This opens up possibilities to
 learn about the countries of the world.
 
 This project uses the [https://github.com/factbook/factbook.json](https://github.com/factbook/factbook.json)
@@ -41,6 +42,19 @@ node loader.mjs
 The loader application will load the data from the factbook.json project into your MongoDB database.
 Then you can query all of the data from the World Factbook via the MongoDB API.
 
+## GraphQL API
+
+You can start the Apollo GraphQL server with the following command:
+
+```bash
+cd src
+node graphql-server.mjs
+```
+
+Then you can access the Apollo Studio Sandbox by opening the following URL in your browser: http://localhost:4000
+
+Note, that you need to adapt the `MONGO_URL` constant in `src/datasources/country-api.mjs` to your MongoDB URL.
+
 ## Exporting Data
 
 Once the data is loaded in the MongoDB database you can export the data to a JSON file using the following command:
@@ -59,13 +73,8 @@ The resulting file is a CSV file (countries-economy.csv) which can be further an
 
 ## Querying Data
 
-If you want to query data from the MongoDB database, you can use the example in `query.mjs`:
-
-```bash
-node query.mjs
-```
-
-Look into the source code of `query.mjs` to see how to query the data.
+You can query the data using the MongoDB API. Alternatively, run the GraphQL server and query via the GraphQL API.
+There also exists the Apollo Studio Sandbox to query the data.
 
 ## License
 

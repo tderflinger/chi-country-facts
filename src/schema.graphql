@@ -1,0 +1,66 @@
+type Country {
+  id: ID!
+  name: String!
+  code: String!
+  internetCountryCode: String!
+  economy: Economy
+}
+
+type Economy {
+  realGDP2021: String!
+  realGDP2020: String!
+  realGDP2019: String!
+  gdpGrowthRate2021: String!
+  gdpGrowthRate2020: String!
+  gdpGrowthRate2019: String!
+  fitchRating: String!
+  moodyRating: String!
+  standardAndPoorRating: String!
+  gdpPerCapita2021: String!
+  gdpPerCapita2020: String!
+  gdpPerCapita2019: String!
+  inflation2021: String!
+  inflation2020: String!
+  inflation2019: String!
+  gdpAgriculture: String!
+  gdpIndustry: String!
+  gdpServices: String!
+  agriculturalProducts: String!
+  industries: String!
+  unemployment2021: String!
+  unemployment2020: String!
+  unemployment2019: String!
+  youthUnemploymentTotal: String!
+  belowPovertyLine: String!
+  budgetRevenues: String!
+  budgetExpenditures: String!
+  taxesRevenues: String!
+  currentAccount2021: String!
+  currentAccount2020: String!
+  currentAccount2019: String!
+  exports2021: String!
+  exports2020: String!
+  exports2019: String!
+  exportsPartners: String!
+  exportsCommodities: String!
+  imports2021: String!
+  imports2020: String!
+  imports2019: String!
+  importsPartners: String!
+  importsCommodities: String!
+  forexReserves2021: String!
+  forexReserves2020: String!
+  forexReserves2019: String!
+  debt2017: String!
+  debt2016: String!
+  exchangeCurrency: String!
+  exchangeRates2021: String!
+  exchangeRates2020: String!
+  exchangeRates2019: String!
+  exchangeRates2018: String!
+}
+
+type Query {
+  "Return country by id"
+  country: [Country!]!
+}
