@@ -1,17 +1,18 @@
 /*
   Loads JSON files from factbook.json project into a Mongo database.
 */
-import { MongoClient } from "mongodb";
 import fs from "fs/promises";
 import path from "path";
 
-const MONGO_URL = "mongodb://dell-linux:27017";
+// const MONGO_URL = "mongodb://localhost:27017";
 
+/*
 const client = new MongoClient(MONGO_URL, {
   useUnifiedTopology: true,
 });
+*/
 
-async function run() {
+export async function load(client) {
   try {
     await client.connect();
     const database = client.db("CountryFacts");
@@ -49,4 +50,4 @@ async function run() {
   }
 }
 
-run().catch(console.dir);
+// run().catch(console.dir);

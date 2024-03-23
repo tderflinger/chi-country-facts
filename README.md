@@ -14,46 +14,33 @@ In Swahili, "nchi" means country. Since this project is about the facts of count
 
 ## Preliminaries
 
-You need an installation of MongoDB to use this project. One possibility is to install MongoDB locally on your machine with Docker:
-[https://hub.docker.com/_/mongo](https://hub.docker.com/_/mongo)
-
-There also exist hosted versions of MongoDB on major cloud providers.
-
-## Installation
-
 Clone the [https://github.com/factbook/factbook.json](https://github.com/factbook/factbook.json) project into the same directory as this project.
 
-Run the folling command to install the JavaScript dependencies:
+## Docker
+
+There is a Docker Compose file in the project to run the GraphQL server together with the MongoDB database.
+
+Start with:
 
 ```bash
-npm install
+docker compose up
 ```
 
-## Loader Usage
-
-Before running the loader, adjust the `MONGO_URL` constant in loader.mjs to your MongoDB URL.
-
-Run the following command to start the server:
-
-```bash
-node loader.mjs
-```
-
-The loader application will load the data from the factbook.json project into your MongoDB database.
-Then you can query all of the data from the World Factbook via the MongoDB API.
-
-## GraphQL API
-
-You can start the Apollo GraphQL server with the following command:
-
-```bash
-cd src
-node graphql-server.mjs
-```
+At the first start the JSON factbook data is loaded into the MongoDB database.
 
 Then you can access the Apollo Studio Sandbox by opening the following URL in your browser: http://localhost:4000
 
-Note, that you need to adapt the `MONGO_URL` constant in `src/datasources/country-api.mjs` to your MongoDB URL.
+Inside the Apollo Studio Sandbox you can query the data.
+
+## GraphQL API
+
+If you want to start the GraphQL server without Docker, you can do so with the following command:
+
+```bash
+npm run start
+```
+
+Note, that you need to specify your MongoDB URL in the `MONGO_URL` environment variable (.env file).
 
 ## Exporting Data
 
@@ -70,11 +57,6 @@ node export-economy-csv.mjs
 ```
 
 The resulting file is a CSV file (countries-economy.csv) which can be further analyzed, for example using Excel or Pandas.
-
-## Querying Data
-
-You can query the data using the MongoDB API. Alternatively, run the GraphQL server and query via the GraphQL API.
-There also exists the Apollo Studio Sandbox to query the data.
 
 ## License
 

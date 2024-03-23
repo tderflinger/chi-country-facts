@@ -1,10 +1,17 @@
 import { MongoClient } from "mongodb";
+import dotenv from "dotenv";
+import { load } from "./loader.mjs";
 
-const MONGO_URL = "mongodb://dell-linux:27017";
+dotenv.config();
+
+const MONGO_URL = process.env.MONGO_URL;
 
 const client = new MongoClient(MONGO_URL, {
   useUnifiedTopology: true,
 });
+
+await client.connect();
+await load(client);
 
 export class CountryAPI {
   constructor() {
