@@ -3,7 +3,31 @@ type Country {
   name: String!
   code: String!
   internetCountryCode: String!
+  geography: Geography
   economy: Economy
+}
+
+type Geography {
+  area: String!
+  location: String!
+  climate: String!
+  terrain: String!
+  mapReferences: String!
+  landBoundaries: String!
+  borderCountries: String!
+  coastline: String!
+  geoNote: String!
+  elevationHighest: String!
+  elevationLowest: String!
+  naturalResources: String!
+  landUseAgriculture: String!
+  landUseArableLand: String!
+  landUseForest: String!
+  landUseOther: String!
+  irrigatedLand: String!
+  majorWatersheds: String!
+  populationDistribution: String!
+  naturalHazards: String!
 }
 
 type Economy {

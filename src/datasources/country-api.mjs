@@ -23,6 +23,12 @@ export class CountryAPI {
       : doc?.Economy?.[key]?.text || "";
   }
 
+  getGeoData(doc, key, subKey) {
+    return subKey
+      ? doc?.Geography?.[key]?.[subKey]?.text || ""
+      : doc?.Geography?.[key]?.text || "";
+  }
+
   async getCountries() {
     let countries = [];
     const cursor = this.collection.find();
@@ -191,6 +197,28 @@ export class CountryAPI {
           exchangeRates2019: this.getEconomyData(doc, "Exchange rates", "Exchange rates 2019"),
           exchangeRates2018: this.getEconomyData(doc, "Exchange rates", "Exchange rates 2018"),
         },
+        geography: {
+          location: this.getGeoData(doc, "Location"),
+          mapReferences: this.getGeoData(doc, "Map references"),
+          area: this.getGeoData(doc, "Area", "total"),
+          landBoundaries: this.getGeoData(doc, "Land boundaries", "total"),
+          borderCountries: this.getGeoData(doc, "Land boundaries", "border countries"),
+          coastline: this.getGeoData(doc, "Coastline"),
+          climate: this.getGeoData(doc, "Climate"),
+          geoNote: this.getGeoData(doc, "Geography - note"), 
+          terrain: this.getGeoData(doc, "Terrain"),
+          elevationHighest: this.getGeoData(doc, "Elevation", "highest point"),
+          elevationLowest: this.getGeoData(doc, "Elevation", "lowest point"),
+          naturalResources: this.getGeoData(doc, "Natural resources"),
+          landUseAgriculture: this.getGeoData(doc, "Land use", "agricultural land"),
+          landUseArableLand: this.getGeoData(doc, "Land use", "agricultural land: arable land"),
+          landUseForest: this.getGeoData(doc, "Land use", "forest"),
+          landUseOther: this.getGeoData(doc, "Land use", "other"),
+          irrigatedLand: this.getGeoData(doc, "Irrigated land"),
+          majorWatersheds: this.getGeoData(doc, "Major watersheds (area sq km)"),
+          populationDistribution: this.getGeoData(doc, "Population distribution"),
+          naturalHazards: this.getGeoData(doc, "Natural hazards"),
+        }
       });
     }
 
