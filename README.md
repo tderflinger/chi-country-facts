@@ -1,6 +1,6 @@
-# chi-country-facts
-
 ![Chi logo](./docs/chi.png)
+
+# chi-country-facts
 
 This projects takes the JSON data from the World Factbook and loads it into a MongoDB database.
 Once loaded, you can query the country facts via the MongoDB API. 
