@@ -5,6 +5,9 @@ type Country {
   internetCountryCode: String!
   geography: Geography
   economy: Economy
+  society: Society
+  government: Government
+  environment: Environment
 }
 
 type Geography {
@@ -82,6 +85,93 @@ type Economy {
   exchangeRates2020: String!
   exchangeRates2019: String!
   exchangeRates2018: String!
+}
+
+type Society {
+  population: String!
+  nationalityNoun: String!
+  nationalityAdjective: String!
+  ethnicGroups: String!
+  languages: String!
+  religions: String!
+  ageStructure14: String!
+  ageStructure64: String!
+  ageStructure65: String!
+  medianAgeTotal: String!
+  populationGrowthRate: String!
+  birthRate: String!
+  deathRate: String!
+  urbanization: String!
+  urbanizationRate: String!
+  majorUrbanAreas: String!
+  sexRatioTotal: String!
+  infantMortalityTotal: String!
+  lifeExpectancyTotal: String!
+  totalFertility: String!
+  drinkingWaterImprovedUrban: String!
+  drinkingWaterImprovedRural: String!
+  healthExpenditure: String!
+  physiciansDensity: String!
+  sanitationAccessImprovedUrban: String!
+  obesityRate: String!
+  alcoholPerCapitaTotal: String!
+  tobaccoUseTotal: String!
+  educationExpenditure: String!
+  literacyDefinition: String!
+  literacyTotal: String!
+  schoolLifeTotal: String!
+}
+
+type Government {
+  countryNameLong: String!
+  countryNameShort: String!
+  countryNameLocalLong: String!
+  countryNameLocalShort: String!
+  countryNameEtymology: String!
+  governmentType: String!
+  capitalName: String!
+  capitalCoordinates: String!
+  capitalEtymology: String!
+  adminDivisions: String!
+  independence: String!
+  nationalHoliday: String!
+  constitutionHistory: String!
+  legalSystem: String!
+  suffrage: String!
+  chiefOfState: String!
+  headOfGov: String!
+  cabinet: String!
+  elections: String!
+  electionResults: String!
+  legislativeDescription: String!
+  legislativeElections: String!
+  judicialCourt: String!
+  judicialSelection: String!
+  politicalParties: String!
+  intOrgs: String!
+  flagDescription: String!
+  nationalSymbol: String!
+  nationalAnthem: String!
+  nationalHeritage: String!
+}
+
+type Environment {
+  currentIssues: String!
+  intAgreements: String!
+  climate: String!
+  landUseAgriculture: String!
+  revenueForest: String!
+  revenueCoal: String!
+  particulateMatter: String!
+  carbonDioxide: String!
+  methane: String!
+  wasteGenerated: String!
+  wasteRecycled: String!
+  majorRivers: String!
+  municipalWater: String!
+  industrialWater: String!
+  agriculturalWater: String!
+  totalRenewableWater: String!
 }
 
 type Query {
