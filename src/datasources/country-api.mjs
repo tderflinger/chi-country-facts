@@ -96,6 +96,17 @@ export class CountryAPI {
       : doc?.["Environment"]?.[key]?.text || "";
   }
 
+  getEnergyData(doc, key, subKey) {
+    return subKey
+      ? doc?.["Energy"]?.[key]?.[subKey]?.text || ""
+      : doc?.["Energy"]?.[key]?.text || "";
+  }
+
+  getComData(doc, key, subKey) {
+    return subKey
+      ? doc?.["Communications"]?.[key]?.[subKey]?.text || ""
+      : doc?.["Communications"]?.[key]?.text || "";
+  }
 
   async getCountries() {
     let countries = [];
@@ -532,6 +543,51 @@ export class CountryAPI {
           industrialWater: this.getEnvData(doc, "Total water withdrawal", "industrial"),
           agriculturalWater: this.getEnvData(doc, "Total water withdrawal", "agricultural"),
           totalRenewableWater: this.getEnvData(doc, "Total renewable water resources"),
+        },
+        energy: {
+            electricityAccess: this.getEnergyData(doc, "Electricity access", "electrification - total population"),
+            electricityInstalled: this.getEnergyData(doc, "Electricity", "installed generating capacity"),
+            electricityConsumption: this.getEnergyData(doc, "Electricity", "consumption"),
+            electricityExports: this.getEnergyData(doc, "Electricity", "exports"),
+            electricityImports: this.getEnergyData(doc, "Electricity", "imports"),
+            electricitySourceFossil: this.getEnergyData(doc, "Electricity generation sources", "fossil fuels"),
+            electricitySourceNuclear: this.getEnergyData(doc, "Electricity generation sources", "nuclear"),
+            electricitySourceSolar: this.getEnergyData(doc, "Electricity generation sources", "solar"),
+            electricitySourceWind: this.getEnergyData(doc, "Electricity generation sources", "wind"),
+            electricitySourceTideWave: this.getEnergyData(doc, "Electricity generation sources", "tide and wave"),
+            electricitySourceGeothermal: this.getEnergyData(doc, "Electricity generation sources", "geothermal"),
+            electricitySourceHydro: this.getEnergyData(doc, "Electricity generation sources", "hydroelectricity"),
+            coalProduction: this.getEnergyData(doc, "Coal", "production"),
+            coalConsumption: this.getEnergyData(doc, "Coal", "consumption"),
+            coalExports: this.getEnergyData(doc, "Coal", "exports"),
+            coalImports: this.getEnergyData(doc, "Coal", "imports"),
+            coalReserves: this.getEnergyData(doc, "Coal", "proven reserves"),
+            petrolProduction: this.getEnergyData(doc, "Petroleum", "total petroleum production"),
+            petrolConsumption: this.getEnergyData(doc, "Petroleum", "refined petroleum consumption"),
+            petrolCrudeExports: this.getEnergyData(doc, "Petroleum", "crude oil and lease condensate exports"),
+            petrolCrudeImports: this.getEnergyData(doc, "Petroleum", "crude oil and lease condensate imports"),
+            petrolCrudeReserves: this.getEnergyData(doc, "Petroleum", "crude oil estimated reserves"),
+            gasProduction: this.getEnergyData(doc, "Natural gas", "production"),
+            gasConsumption: this.getEnergyData(doc, "Natural gas", "consumption"),
+            gasExports: this.getEnergyData(doc, "Natural gas", "exports"),
+            gasImports: this.getEnergyData(doc, "Natural gas", "imports"),
+            gasReserves: this.getEnergyData(doc, "Natural gas", "proven reserves"),
+            carbonDioxideEmissions: this.getEnergyData(doc, "Carbon dioxide emissions", "total emissions"),
+            energyConsumptionPerCapita: this.getEnergyData(doc, "Energy consumption per capita", "Total energy consumption per capita 2019"),
+        },
+        communications: {
+            phoneFixedTotal: this.getComData(doc, "Telephones - fixed lines", "total subscriptions"),
+            phoneFixedPer100: this.getComData(doc, "Telephones - fixed lines", "subscriptions per 100 inhabitants"),
+            phoneMobileTotal: this.getComData(doc, "Telephones - mobile cellular", "total subscriptions"),
+            phoneMobilePer100: this.getComData(doc, "Telephones - mobile cellular", "subscriptions per 100 inhabitants"),
+            telecomSystemsAssessment: this.getComData(doc, "Telecommunication systems", "general assessment"),
+            telecomSystemsInternational: this.getComData(doc, "Telecommunication systems", "international"),
+            broadcastMedia: this.getComData(doc, "Broadcast media"),
+            internetCountryCode: this.getComData(doc, "Internet country code"),
+            internetUsersTotal: this.getComData(doc, "Internet users", "total"),
+            internetUsersPer100: this.getComData(doc, "Internet users", "percent of population"),
+            broadbandSubscriptionsTotal: this.getComData(doc, "Broadband - fixed subscriptions", "total"),
+            broadbandSubscriptionsPer100: this.getComData(doc, "Broadband - fixed subscriptions", "subscriptions per 100 inhabitants"),
         }
       });
     }

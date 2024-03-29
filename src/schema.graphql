@@ -8,6 +8,8 @@ type Country {
   society: Society
   government: Government
   environment: Environment
+  energy: Energy
+  communications: Communications
 }
 
 type Geography {
@@ -172,6 +174,53 @@ type Environment {
   industrialWater: String!
   agriculturalWater: String!
   totalRenewableWater: String!
+}
+
+type Energy {
+  electricityAccess: String!
+  electricityInstalled: String!
+  electricityConsumption: String!
+  electricityExports: String!
+  electricityImports: String!
+  electricitySourceFossil: String!
+  electricitySourceNuclear: String!
+  electricitySourceHydro: String!
+  electricitySourceSolar: String!
+  electricitySourceWind: String!
+  electricitySourceTideWave: String!
+  electricitySourceGeothermal: String!
+  coalProduction: String!
+  coalConsumption: String!
+  coalExports: String!
+  coalImports: String!
+  coalReserves: String!
+  petrolProduction: String!
+  petrolConsumption: String!
+  petrolCrudeExports: String!
+  petrolCrudeImports: String!
+  petrolCrudeReserves: String!
+  gasProduction: String!
+  gasConsumption: String!
+  gasExports: String!
+  gasImports: String!
+  gasReserves: String!
+  carbonDioxideEmissions: String!
+  energyConsumptionPerCapita: String!
+}
+
+type Communications {
+  phoneFixedTotal: String!
+  phoneFixedPer100: String!
+  phoneMobileTotal: String!
+  phoneMobilePer100: String!
+  telecomSystemsAssessment: String!
+  telecomSystemsInternational: String!
+  broadcastMedia: String!
+  internetCountryCode: String!
+  internetUsersTotal: String!
+  internetUsersPer100: String!
+  broadbandSubscriptionsTotal: String!
+  broadbandSubscriptionsPer100: String!
 }
 
 type Query {
