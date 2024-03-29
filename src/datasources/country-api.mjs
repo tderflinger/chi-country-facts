@@ -108,6 +108,18 @@ export class CountryAPI {
       : doc?.["Communications"]?.[key]?.text || "";
   }
 
+  getTransportData(doc, key, subKey) {
+    return subKey
+      ? doc?.["Transportation"]?.[key]?.[subKey]?.text || ""
+      : doc?.["Transportation"]?.[key]?.text || "";
+  }
+
+  getMilitaryData(doc, key, subKey) {
+    return subKey
+      ? doc?.["Military and Security"]?.[key]?.[subKey]?.text || ""
+      : doc?.["Military and Security"]?.[key]?.text || "";
+  }
+
   async getCountries() {
     let countries = [];
     const cursor = this.collection.find();
@@ -588,6 +600,33 @@ export class CountryAPI {
             internetUsersPer100: this.getComData(doc, "Internet users", "percent of population"),
             broadbandSubscriptionsTotal: this.getComData(doc, "Broadband - fixed subscriptions", "total"),
             broadbandSubscriptionsPer100: this.getComData(doc, "Broadband - fixed subscriptions", "subscriptions per 100 inhabitants"),
+        },
+        transport: {
+            numberAirCarriers: this.getTransportData(doc, "National air transport system", "number of registered air carriers"),
+            numberAircraft: this.getTransportData(doc, "National air transport system", "inventory of registered aircraft operated by air carriers"),
+            annualPassengerAirTraffic: this.getTransportData(doc, "National air transport system", "annual passenger traffic on registered air carriers"),
+            annualFreightAirTraffic: this.getTransportData(doc, "National air transport system", "annual freight traffic on registered air carriers"),
+            aircraftRegistrationCode: this.getTransportData(doc, "Civil aircraft registration country code prefix"),
+            airports: this.getTransportData(doc, "Airports"),
+            airportsWithPavedRunways: this.getTransportData(doc, "Airports - with paved runways", "total"),
+            airportsWithUnpavedRunways: this.getTransportData(doc, "Airports - with unpaved runways"),
+            pipelines: this.getTransportData(doc, "Pipelines"),
+            railways: this.getTransportData(doc, "Railways", "total"),
+            roadways: this.getTransportData(doc, "Roadways", "total"),
+            waterways: this.getTransportData(doc, "Waterways"),
+            merchantMarine: this.getTransportData(doc, "Merchant marine", "total"),
+            majorSeaports: this.getTransportData(doc, "Ports and terminals", "major seaport(s)"),
+        },
+        military: {
+          militaryForces: this.getMilitaryData(doc, "Military and security forces"),
+          militaryExpenditure2022: this.getMilitaryData(doc, "Military expenditures", "Military Expenditures 2022"),
+          militaryExpenditure2021: this.getMilitaryData(doc, "Military expenditures", "Military Expenditures 2021"),
+          militaryExpenditure2020: this.getMilitaryData(doc, "Military expenditures", "Military Expenditures 2020"),
+          militaryPersonnelStrength: this.getMilitaryData(doc, "Military and security service personnel strengths"),
+          militaryEquipment: this.getMilitaryData(doc, "Military equipment inventories and acquisitions"),
+          serviceAge: this.getMilitaryData(doc, "Military service age and obligation"),
+          deployments: this.getMilitaryData(doc, "Military deployments"),
+          note: this.getMilitaryData(doc, "Military - note"),
         }
       });
     }

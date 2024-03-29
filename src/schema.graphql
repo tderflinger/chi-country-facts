@@ -10,6 +10,8 @@ type Country {
   environment: Environment
   energy: Energy
   communications: Communications
+  transport: Transport
+  military: Military
 }
 
 type Geography {
@@ -221,6 +223,35 @@ type Communications {
   internetUsersPer100: String!
   broadbandSubscriptionsTotal: String!
   broadbandSubscriptionsPer100: String!
+}
+
+type Transport {
+  numberAirCarriers: String!
+  numberAircraft: String!
+  annualPassengerAirTraffic: String!
+  annualFreightAirTraffic: String!
+  aircraftRegistrationCode: String!
+  airports: String!
+  airportsWithPavedRunways: String!
+  airportsWithUnpavedRunways: String!
+  pipelines: String!
+  railways: String!
+  roadways: String!
+  waterways: String!
+  merchantMarine: String!
+  majorSeaports: String!
+}
+
+type Military {
+  militaryForces: String!
+  militaryExpenditure2022: String!
+  militaryExpenditure2021: String!
+  militaryExpenditure2020: String!
+  militaryPersonnelStrength: String!
+  militaryEquipment: String!
+  serviceAge: String!
+  deployments: String!
+  note: String
 }
 
 type Query {
