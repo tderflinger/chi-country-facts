@@ -20,6 +20,20 @@ const cleanData = (text) => {
   return text.split("(")[0].trim();
 };
 
+const cleanMetricTons = (text) => {
+  if (!text) {
+    return "";
+  }
+  return text.replace("metric tons", "").trim();
+}
+
+const removeCommas = (text) => {
+  if (!text) {
+    return "";
+  }
+  return text.replace(/,/g, "");
+}
+
 const parseNumber = (str) => {
   if (!str) return "";
   if (str === "") return "";
@@ -79,9 +93,9 @@ export class CountryAPI {
   }
 
   getSocietyData(doc, key, subKey) {
-    return subKey
+    return cleanData(subKey
       ? doc?.["People and Society"]?.[key]?.[subKey]?.text || ""
-      : doc?.["People and Society"]?.[key]?.text || "";
+      : doc?.["People and Society"]?.[key]?.text || "");
   }
 
   getGovData(doc, key, subKey) {
@@ -118,6 +132,12 @@ export class CountryAPI {
     return subKey
       ? doc?.["Military and Security"]?.[key]?.[subKey]?.text || ""
       : doc?.["Military and Security"]?.[key]?.text || "";
+  }
+
+  getTransnationalData(doc, key, subKey) {
+    return subKey
+      ? doc?.["Transnational Issues"]?.[key]?.[subKey]?.text || ""
+      : doc?.["Transnational Issues"]?.[key]?.text || "";
   }
 
   async getCountries() {
@@ -571,7 +591,7 @@ export class CountryAPI {
             electricitySourceHydro: this.getEnergyData(doc, "Electricity generation sources", "hydroelectricity"),
             coalProduction: this.getEnergyData(doc, "Coal", "production"),
             coalConsumption: this.getEnergyData(doc, "Coal", "consumption"),
-            coalExports: this.getEnergyData(doc, "Coal", "exports"),
+            coalExports: parseNumber(removeCommas(cleanMetricTons(cleanData(this.getEnergyData(doc, "Coal", "exports"))))),
             coalImports: this.getEnergyData(doc, "Coal", "imports"),
             coalReserves: this.getEnergyData(doc, "Coal", "proven reserves"),
             petrolProduction: this.getEnergyData(doc, "Petroleum", "total petroleum production"),
@@ -596,7 +616,7 @@ export class CountryAPI {
             telecomSystemsInternational: this.getComData(doc, "Telecommunication systems", "international"),
             broadcastMedia: this.getComData(doc, "Broadcast media"),
             internetCountryCode: this.getComData(doc, "Internet country code"),
-            internetUsersTotal: this.getComData(doc, "Internet users", "total"),
+            internetUsersTotal: parseNumber(cleanData(this.getComData(doc, "Internet users", "total"))),
             internetUsersPer100: this.getComData(doc, "Internet users", "percent of population"),
             broadbandSubscriptionsTotal: this.getComData(doc, "Broadband - fixed subscriptions", "total"),
             broadbandSubscriptionsPer100: this.getComData(doc, "Broadband - fixed subscriptions", "subscriptions per 100 inhabitants"),
@@ -604,10 +624,10 @@ export class CountryAPI {
         transport: {
             numberAirCarriers: this.getTransportData(doc, "National air transport system", "number of registered air carriers"),
             numberAircraft: this.getTransportData(doc, "National air transport system", "inventory of registered aircraft operated by air carriers"),
-            annualPassengerAirTraffic: this.getTransportData(doc, "National air transport system", "annual passenger traffic on registered air carriers"),
+            annualPassengerAirTraffic: parseNumber(removeCommas(cleanData(this.getTransportData(doc, "National air transport system", "annual passenger traffic on registered air carriers")))),
             annualFreightAirTraffic: this.getTransportData(doc, "National air transport system", "annual freight traffic on registered air carriers"),
             aircraftRegistrationCode: this.getTransportData(doc, "Civil aircraft registration country code prefix"),
-            airports: this.getTransportData(doc, "Airports"),
+            airports: removeCommas(cleanData(this.getTransportData(doc, "Airports"))),
             airportsWithPavedRunways: this.getTransportData(doc, "Airports - with paved runways", "total"),
             airportsWithUnpavedRunways: this.getTransportData(doc, "Airports - with unpaved runways"),
             pipelines: this.getTransportData(doc, "Pipelines"),
@@ -627,6 +647,11 @@ export class CountryAPI {
           serviceAge: this.getMilitaryData(doc, "Military service age and obligation"),
           deployments: this.getMilitaryData(doc, "Military deployments"),
           note: this.getMilitaryData(doc, "Military - note"),
+        },
+        transnationalIssues: {
+          disputes: this.getTransnationalData(doc, "Disputes - international"),
+          refugees: this.getTransnationalData(doc, "Refugees and internally displaced persons", "refugees (country of origin)"),
+          statelessPersons: this.getTransnationalData(doc, "Refugees and internally displaced persons", "stateless persons"),
         }
       });
     }

@@ -12,6 +12,7 @@ type Country {
   communications: Communications
   transport: Transport
   military: Military
+  transnationalIssues: TransnationalIssues
 }
 
 type Geography {
@@ -252,6 +253,12 @@ type Military {
   serviceAge: String!
   deployments: String!
   note: String
+}
+
+type TransnationalIssues {
+  disputes: String!
+  refugees: String!
+  statelessPersons: String!
 }
 
 type Query {
