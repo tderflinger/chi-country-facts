@@ -17,6 +17,10 @@ type Country {
 
 type Geography {
   area: String!
+  areaLand: String!
+  areaWater: String!
+  areaAgriculture: String!
+  territorialSea: String!
   location: String!
   climate: String!
   terrain: String!

@@ -20,19 +20,26 @@ const cleanData = (text) => {
   return text.split("(")[0].trim();
 };
 
+const cleanPercent = (text) => {
+  if (!text) {
+    return "";
+  }
+  return text.replace("%", "").trim();
+};
+
 const cleanMetricTons = (text) => {
   if (!text) {
     return "";
   }
   return text.replace("metric tons", "").trim();
-}
+};
 
 const removeCommas = (text) => {
   if (!text) {
     return "";
   }
   return text.replace(/,/g, "");
-}
+};
 
 const parseNumber = (str) => {
   if (!str) return "";
@@ -93,9 +100,11 @@ export class CountryAPI {
   }
 
   getSocietyData(doc, key, subKey) {
-    return cleanData(subKey
-      ? doc?.["People and Society"]?.[key]?.[subKey]?.text || ""
-      : doc?.["People and Society"]?.[key]?.text || "");
+    return cleanData(
+      subKey
+        ? doc?.["People and Society"]?.[key]?.[subKey]?.text || ""
+        : doc?.["People and Society"]?.[key]?.text || ""
+    );
   }
 
   getGovData(doc, key, subKey) {
@@ -356,7 +365,18 @@ export class CountryAPI {
         geography: {
           location: this.getGeoData(doc, "Location"),
           mapReferences: this.getGeoData(doc, "Map references"),
-          area: this.getGeoData(doc, "Area", "total"),
+          area: parseNumber(
+            removeCommas(
+              cleanMetricTons(cleanData(this.getGeoData(doc, "Area", "total")))
+            )
+          ),
+          areaLand: this.getGeoData(doc, "Area", "land"),
+          areaWater: this.getGeoData(doc, "Area", "water"),
+          territorialSea: this.getGeoData(
+            doc,
+            "Maritime claims",
+            "territorial sea"
+          ),
           landBoundaries: this.getGeoData(doc, "Land boundaries", "total"),
           borderCountries: this.getGeoData(
             doc,
@@ -370,11 +390,27 @@ export class CountryAPI {
           elevationHighest: this.getGeoData(doc, "Elevation", "highest point"),
           elevationLowest: this.getGeoData(doc, "Elevation", "lowest point"),
           naturalResources: this.getGeoData(doc, "Natural resources"),
-          landUseAgriculture: this.getGeoData(
-            doc,
-            "Land use",
-            "agricultural land"
+          landUseAgriculture: cleanPercent(
+            removeCommas(
+              cleanData(this.getGeoData(doc, "Land use", "agricultural land"))
+            )
           ),
+          areaAgriculture:
+            (parseNumber(
+              removeCommas(
+                cleanMetricTons(
+                  cleanData(this.getGeoData(doc, "Area", "total"))
+                )
+              )
+            ) *
+              cleanPercent(
+                removeCommas(
+                  cleanData(
+                    this.getGeoData(doc, "Land use", "agricultural land")
+                  )
+                )
+              )) /
+            100,
           landUseArableLand: this.getGeoData(
             doc,
             "Land use",
@@ -534,7 +570,11 @@ export class CountryAPI {
           ),
           governmentType: this.getGovData(doc, "Government type"),
           capitalName: this.getGovData(doc, "Capital", "name"),
-          capitalCoordinates: this.getGovData(doc, "Capital", "geographic coordinates"),
+          capitalCoordinates: this.getGovData(
+            doc,
+            "Capital",
+            "geographic coordinates"
+          ),
           capitalEtymology: this.getGovData(doc, "Capital", "etymology"),
           adminDivisions: this.getGovData(doc, "Administrative divisions"),
           independence: this.getGovData(doc, "Independence"),
@@ -542,117 +582,400 @@ export class CountryAPI {
           constitutionHistory: this.getGovData(doc, "Constitution", "history"),
           legalSystem: this.getGovData(doc, "Legal system"),
           suffrage: this.getGovData(doc, "Suffrage"),
-          chiefOfState: this.getGovData(doc, "Executive branch", "chief of state"),
-          headOfGov: this.getGovData(doc, "Executive branch", "head of government"),
+          chiefOfState: this.getGovData(
+            doc,
+            "Executive branch",
+            "chief of state"
+          ),
+          headOfGov: this.getGovData(
+            doc,
+            "Executive branch",
+            "head of government"
+          ),
           cabinet: this.getGovData(doc, "Executive branch", "cabinet"),
-          elections: this.getGovData(doc, "Executive branch", "elections/appointments"),
-          electionResults: this.getGovData(doc, "Executive branch", "election results"),
-          legislativeDescription: this.getGovData(doc, "Legislative branch", "description"),
-          legislativeElections: this.getGovData(doc, "Legislative branch", "elections"),
-          judicialCourt: this.getGovData(doc, "Judicial branch", "highest court(s)"),
-          judicialSelection: this.getGovData(doc, "Judicial branch", "judge selection and term of office"),
-          politicalParties: this.getGovData(doc, "Political parties and leaders"),
-          intOrgs: this.getGovData(doc, "International organization participation"),
+          elections: this.getGovData(
+            doc,
+            "Executive branch",
+            "elections/appointments"
+          ),
+          electionResults: this.getGovData(
+            doc,
+            "Executive branch",
+            "election results"
+          ),
+          legislativeDescription: this.getGovData(
+            doc,
+            "Legislative branch",
+            "description"
+          ),
+          legislativeElections: this.getGovData(
+            doc,
+            "Legislative branch",
+            "elections"
+          ),
+          judicialCourt: this.getGovData(
+            doc,
+            "Judicial branch",
+            "highest court(s)"
+          ),
+          judicialSelection: this.getGovData(
+            doc,
+            "Judicial branch",
+            "judge selection and term of office"
+          ),
+          politicalParties: this.getGovData(
+            doc,
+            "Political parties and leaders"
+          ),
+          intOrgs: this.getGovData(
+            doc,
+            "International organization participation"
+          ),
           flagDescription: this.getGovData(doc, "Flag description"),
           nationalSymbol: this.getGovData(doc, "National symbol(s)"),
           nationalAnthem: this.getGovData(doc, "National anthem", "name"),
-          nationalHeritage: this.getGovData(doc, "National heritage", "total World Heritage Sites"),
+          nationalHeritage: this.getGovData(
+            doc,
+            "National heritage",
+            "total World Heritage Sites"
+          ),
         },
         environment: {
           currentIssues: this.getEnvData(doc, "Environment - current issues"),
-          intAgreements: this.getEnvData(doc, "Environment - international agreements", "party to"),
+          intAgreements: this.getEnvData(
+            doc,
+            "Environment - international agreements",
+            "party to"
+          ),
           climate: this.getEnvData(doc, "Climate"),
-          landUseAgriculture: this.getEnvData(doc, "Land use", "agricultural land"),
+          landUseAgriculture: this.getEnvData(
+            doc,
+            "Land use",
+            "agricultural land"
+          ),
           revenueForest: this.getEnvData(doc, "Revenue from forest resources"),
           revenueCoal: this.getEnvData(doc, "Revenue from coal"),
-          particulateMatter: this.getEnvData(doc, "Air pollutants", "particulate matter emissions"),
-          carbonDioxide: this.getEnvData(doc, "Air pollutants", "carbon dioxide emissions"),
+          particulateMatter: this.getEnvData(
+            doc,
+            "Air pollutants",
+            "particulate matter emissions"
+          ),
+          carbonDioxide: this.getEnvData(
+            doc,
+            "Air pollutants",
+            "carbon dioxide emissions"
+          ),
           methane: this.getEnvData(doc, "Air pollutants", "methane emissions"),
-          wasteGenerated: this.getEnvData(doc, "Waste and recycling", "municipal solid waste generated annually"),
-          wasteRecycled: this.getEnvData(doc, "Waste and recycling", "municipal solid waste recycled annually"),
+          wasteGenerated: this.getEnvData(
+            doc,
+            "Waste and recycling",
+            "municipal solid waste generated annually"
+          ),
+          wasteRecycled: this.getEnvData(
+            doc,
+            "Waste and recycling",
+            "municipal solid waste recycled annually"
+          ),
           majorRivers: this.getEnvData(doc, "Major rivers (by length in km)"),
-          municipalWater: this.getEnvData(doc, "Total water withdrawal", "municipal"),
-          industrialWater: this.getEnvData(doc, "Total water withdrawal", "industrial"),
-          agriculturalWater: this.getEnvData(doc, "Total water withdrawal", "agricultural"),
-          totalRenewableWater: this.getEnvData(doc, "Total renewable water resources"),
+          municipalWater: this.getEnvData(
+            doc,
+            "Total water withdrawal",
+            "municipal"
+          ),
+          industrialWater: this.getEnvData(
+            doc,
+            "Total water withdrawal",
+            "industrial"
+          ),
+          agriculturalWater: this.getEnvData(
+            doc,
+            "Total water withdrawal",
+            "agricultural"
+          ),
+          totalRenewableWater: this.getEnvData(
+            doc,
+            "Total renewable water resources"
+          ),
         },
         energy: {
-            electricityAccess: this.getEnergyData(doc, "Electricity access", "electrification - total population"),
-            electricityInstalled: this.getEnergyData(doc, "Electricity", "installed generating capacity"),
-            electricityConsumption: this.getEnergyData(doc, "Electricity", "consumption"),
-            electricityExports: this.getEnergyData(doc, "Electricity", "exports"),
-            electricityImports: this.getEnergyData(doc, "Electricity", "imports"),
-            electricitySourceFossil: this.getEnergyData(doc, "Electricity generation sources", "fossil fuels"),
-            electricitySourceNuclear: this.getEnergyData(doc, "Electricity generation sources", "nuclear"),
-            electricitySourceSolar: this.getEnergyData(doc, "Electricity generation sources", "solar"),
-            electricitySourceWind: this.getEnergyData(doc, "Electricity generation sources", "wind"),
-            electricitySourceTideWave: this.getEnergyData(doc, "Electricity generation sources", "tide and wave"),
-            electricitySourceGeothermal: this.getEnergyData(doc, "Electricity generation sources", "geothermal"),
-            electricitySourceHydro: this.getEnergyData(doc, "Electricity generation sources", "hydroelectricity"),
-            coalProduction: this.getEnergyData(doc, "Coal", "production"),
-            coalConsumption: this.getEnergyData(doc, "Coal", "consumption"),
-            coalExports: parseNumber(removeCommas(cleanMetricTons(cleanData(this.getEnergyData(doc, "Coal", "exports"))))),
-            coalImports: this.getEnergyData(doc, "Coal", "imports"),
-            coalReserves: this.getEnergyData(doc, "Coal", "proven reserves"),
-            petrolProduction: this.getEnergyData(doc, "Petroleum", "total petroleum production"),
-            petrolConsumption: this.getEnergyData(doc, "Petroleum", "refined petroleum consumption"),
-            petrolCrudeExports: this.getEnergyData(doc, "Petroleum", "crude oil and lease condensate exports"),
-            petrolCrudeImports: this.getEnergyData(doc, "Petroleum", "crude oil and lease condensate imports"),
-            petrolCrudeReserves: this.getEnergyData(doc, "Petroleum", "crude oil estimated reserves"),
-            gasProduction: this.getEnergyData(doc, "Natural gas", "production"),
-            gasConsumption: this.getEnergyData(doc, "Natural gas", "consumption"),
-            gasExports: this.getEnergyData(doc, "Natural gas", "exports"),
-            gasImports: this.getEnergyData(doc, "Natural gas", "imports"),
-            gasReserves: this.getEnergyData(doc, "Natural gas", "proven reserves"),
-            carbonDioxideEmissions: this.getEnergyData(doc, "Carbon dioxide emissions", "total emissions"),
-            energyConsumptionPerCapita: this.getEnergyData(doc, "Energy consumption per capita", "Total energy consumption per capita 2019"),
+          electricityAccess: this.getEnergyData(
+            doc,
+            "Electricity access",
+            "electrification - total population"
+          ),
+          electricityInstalled: this.getEnergyData(
+            doc,
+            "Electricity",
+            "installed generating capacity"
+          ),
+          electricityConsumption: this.getEnergyData(
+            doc,
+            "Electricity",
+            "consumption"
+          ),
+          electricityExports: this.getEnergyData(doc, "Electricity", "exports"),
+          electricityImports: this.getEnergyData(doc, "Electricity", "imports"),
+          electricitySourceFossil: this.getEnergyData(
+            doc,
+            "Electricity generation sources",
+            "fossil fuels"
+          ),
+          electricitySourceNuclear: this.getEnergyData(
+            doc,
+            "Electricity generation sources",
+            "nuclear"
+          ),
+          electricitySourceSolar: this.getEnergyData(
+            doc,
+            "Electricity generation sources",
+            "solar"
+          ),
+          electricitySourceWind: this.getEnergyData(
+            doc,
+            "Electricity generation sources",
+            "wind"
+          ),
+          electricitySourceTideWave: this.getEnergyData(
+            doc,
+            "Electricity generation sources",
+            "tide and wave"
+          ),
+          electricitySourceGeothermal: this.getEnergyData(
+            doc,
+            "Electricity generation sources",
+            "geothermal"
+          ),
+          electricitySourceHydro: this.getEnergyData(
+            doc,
+            "Electricity generation sources",
+            "hydroelectricity"
+          ),
+          coalProduction: this.getEnergyData(doc, "Coal", "production"),
+          coalConsumption: this.getEnergyData(doc, "Coal", "consumption"),
+          coalExports: parseNumber(
+            removeCommas(
+              cleanMetricTons(
+                cleanData(this.getEnergyData(doc, "Coal", "exports"))
+              )
+            )
+          ),
+          coalImports: this.getEnergyData(doc, "Coal", "imports"),
+          coalReserves: this.getEnergyData(doc, "Coal", "proven reserves"),
+          petrolProduction: this.getEnergyData(
+            doc,
+            "Petroleum",
+            "total petroleum production"
+          ),
+          petrolConsumption: this.getEnergyData(
+            doc,
+            "Petroleum",
+            "refined petroleum consumption"
+          ),
+          petrolCrudeExports: this.getEnergyData(
+            doc,
+            "Petroleum",
+            "crude oil and lease condensate exports"
+          ),
+          petrolCrudeImports: this.getEnergyData(
+            doc,
+            "Petroleum",
+            "crude oil and lease condensate imports"
+          ),
+          petrolCrudeReserves: this.getEnergyData(
+            doc,
+            "Petroleum",
+            "crude oil estimated reserves"
+          ),
+          gasProduction: this.getEnergyData(doc, "Natural gas", "production"),
+          gasConsumption: this.getEnergyData(doc, "Natural gas", "consumption"),
+          gasExports: this.getEnergyData(doc, "Natural gas", "exports"),
+          gasImports: this.getEnergyData(doc, "Natural gas", "imports"),
+          gasReserves: this.getEnergyData(
+            doc,
+            "Natural gas",
+            "proven reserves"
+          ),
+          carbonDioxideEmissions: this.getEnergyData(
+            doc,
+            "Carbon dioxide emissions",
+            "total emissions"
+          ),
+          energyConsumptionPerCapita: this.getEnergyData(
+            doc,
+            "Energy consumption per capita",
+            "Total energy consumption per capita 2019"
+          ),
         },
         communications: {
-            phoneFixedTotal: this.getComData(doc, "Telephones - fixed lines", "total subscriptions"),
-            phoneFixedPer100: this.getComData(doc, "Telephones - fixed lines", "subscriptions per 100 inhabitants"),
-            phoneMobileTotal: this.getComData(doc, "Telephones - mobile cellular", "total subscriptions"),
-            phoneMobilePer100: this.getComData(doc, "Telephones - mobile cellular", "subscriptions per 100 inhabitants"),
-            telecomSystemsAssessment: this.getComData(doc, "Telecommunication systems", "general assessment"),
-            telecomSystemsInternational: this.getComData(doc, "Telecommunication systems", "international"),
-            broadcastMedia: this.getComData(doc, "Broadcast media"),
-            internetCountryCode: this.getComData(doc, "Internet country code"),
-            internetUsersTotal: parseNumber(cleanData(this.getComData(doc, "Internet users", "total"))),
-            internetUsersPer100: this.getComData(doc, "Internet users", "percent of population"),
-            broadbandSubscriptionsTotal: this.getComData(doc, "Broadband - fixed subscriptions", "total"),
-            broadbandSubscriptionsPer100: this.getComData(doc, "Broadband - fixed subscriptions", "subscriptions per 100 inhabitants"),
+          phoneFixedTotal: this.getComData(
+            doc,
+            "Telephones - fixed lines",
+            "total subscriptions"
+          ),
+          phoneFixedPer100: this.getComData(
+            doc,
+            "Telephones - fixed lines",
+            "subscriptions per 100 inhabitants"
+          ),
+          phoneMobileTotal: this.getComData(
+            doc,
+            "Telephones - mobile cellular",
+            "total subscriptions"
+          ),
+          phoneMobilePer100: this.getComData(
+            doc,
+            "Telephones - mobile cellular",
+            "subscriptions per 100 inhabitants"
+          ),
+          telecomSystemsAssessment: this.getComData(
+            doc,
+            "Telecommunication systems",
+            "general assessment"
+          ),
+          telecomSystemsInternational: this.getComData(
+            doc,
+            "Telecommunication systems",
+            "international"
+          ),
+          broadcastMedia: this.getComData(doc, "Broadcast media"),
+          internetCountryCode: this.getComData(doc, "Internet country code"),
+          internetUsersTotal: parseNumber(
+            cleanData(this.getComData(doc, "Internet users", "total"))
+          ),
+          internetUsersPer100: this.getComData(
+            doc,
+            "Internet users",
+            "percent of population"
+          ),
+          broadbandSubscriptionsTotal: this.getComData(
+            doc,
+            "Broadband - fixed subscriptions",
+            "total"
+          ),
+          broadbandSubscriptionsPer100: this.getComData(
+            doc,
+            "Broadband - fixed subscriptions",
+            "subscriptions per 100 inhabitants"
+          ),
         },
         transport: {
-            numberAirCarriers: this.getTransportData(doc, "National air transport system", "number of registered air carriers"),
-            numberAircraft: this.getTransportData(doc, "National air transport system", "inventory of registered aircraft operated by air carriers"),
-            annualPassengerAirTraffic: parseNumber(removeCommas(cleanData(this.getTransportData(doc, "National air transport system", "annual passenger traffic on registered air carriers")))),
-            annualFreightAirTraffic: this.getTransportData(doc, "National air transport system", "annual freight traffic on registered air carriers"),
-            aircraftRegistrationCode: this.getTransportData(doc, "Civil aircraft registration country code prefix"),
-            airports: removeCommas(cleanData(this.getTransportData(doc, "Airports"))),
-            airportsWithPavedRunways: this.getTransportData(doc, "Airports - with paved runways", "total"),
-            airportsWithUnpavedRunways: this.getTransportData(doc, "Airports - with unpaved runways"),
-            pipelines: this.getTransportData(doc, "Pipelines"),
-            railways: this.getTransportData(doc, "Railways", "total"),
-            roadways: this.getTransportData(doc, "Roadways", "total"),
-            waterways: this.getTransportData(doc, "Waterways"),
-            merchantMarine: this.getTransportData(doc, "Merchant marine", "total"),
-            majorSeaports: this.getTransportData(doc, "Ports and terminals", "major seaport(s)"),
+          numberAirCarriers: this.getTransportData(
+            doc,
+            "National air transport system",
+            "number of registered air carriers"
+          ),
+          numberAircraft: removeCommas(
+            cleanData(
+              this.getTransportData(
+                doc,
+                "National air transport system",
+                "inventory of registered aircraft operated by air carriers"
+              )
+            )
+          ),
+          annualPassengerAirTraffic: parseNumber(
+            removeCommas(
+              cleanData(
+                this.getTransportData(
+                  doc,
+                  "National air transport system",
+                  "annual passenger traffic on registered air carriers"
+                )
+              )
+            )
+          ),
+          annualFreightAirTraffic: this.getTransportData(
+            doc,
+            "National air transport system",
+            "annual freight traffic on registered air carriers"
+          ),
+          aircraftRegistrationCode: this.getTransportData(
+            doc,
+            "Civil aircraft registration country code prefix"
+          ),
+          airports: removeCommas(
+            cleanData(this.getTransportData(doc, "Airports"))
+          ),
+          airportsWithPavedRunways: this.getTransportData(
+            doc,
+            "Airports - with paved runways",
+            "total"
+          ),
+          airportsWithUnpavedRunways: this.getTransportData(
+            doc,
+            "Airports - with unpaved runways"
+          ),
+          pipelines: this.getTransportData(doc, "Pipelines"),
+          railways: parseNumber(
+            removeCommas(
+              cleanData(this.getTransportData(doc, "Railways", "total"))
+            )
+          ),
+          roadways: parseNumber(
+            removeCommas(
+              cleanData(this.getTransportData(doc, "Roadways", "total"))
+            )
+          ),
+          waterways: this.getTransportData(doc, "Waterways"),
+          merchantMarine: this.getTransportData(
+            doc,
+            "Merchant marine",
+            "total"
+          ),
+          majorSeaports: this.getTransportData(
+            doc,
+            "Ports and terminals",
+            "major seaport(s)"
+          ),
         },
         military: {
-          militaryForces: this.getMilitaryData(doc, "Military and security forces"),
-          militaryExpenditure2022: this.getMilitaryData(doc, "Military expenditures", "Military Expenditures 2022"),
-          militaryExpenditure2021: this.getMilitaryData(doc, "Military expenditures", "Military Expenditures 2021"),
-          militaryExpenditure2020: this.getMilitaryData(doc, "Military expenditures", "Military Expenditures 2020"),
-          militaryPersonnelStrength: this.getMilitaryData(doc, "Military and security service personnel strengths"),
-          militaryEquipment: this.getMilitaryData(doc, "Military equipment inventories and acquisitions"),
-          serviceAge: this.getMilitaryData(doc, "Military service age and obligation"),
+          militaryForces: this.getMilitaryData(
+            doc,
+            "Military and security forces"
+          ),
+          militaryExpenditure2022: this.getMilitaryData(
+            doc,
+            "Military expenditures",
+            "Military Expenditures 2022"
+          ),
+          militaryExpenditure2021: this.getMilitaryData(
+            doc,
+            "Military expenditures",
+            "Military Expenditures 2021"
+          ),
+          militaryExpenditure2020: this.getMilitaryData(
+            doc,
+            "Military expenditures",
+            "Military Expenditures 2020"
+          ),
+          militaryPersonnelStrength: this.getMilitaryData(
+            doc,
+            "Military and security service personnel strengths"
+          ),
+          militaryEquipment: this.getMilitaryData(
+            doc,
+            "Military equipment inventories and acquisitions"
+          ),
+          serviceAge: this.getMilitaryData(
+            doc,
+            "Military service age and obligation"
+          ),
           deployments: this.getMilitaryData(doc, "Military deployments"),
           note: this.getMilitaryData(doc, "Military - note"),
         },
         transnationalIssues: {
           disputes: this.getTransnationalData(doc, "Disputes - international"),
-          refugees: this.getTransnationalData(doc, "Refugees and internally displaced persons", "refugees (country of origin)"),
-          statelessPersons: this.getTransnationalData(doc, "Refugees and internally displaced persons", "stateless persons"),
-        }
+          refugees: this.getTransnationalData(
+            doc,
+            "Refugees and internally displaced persons",
+            "refugees (country of origin)"
+          ),
+          statelessPersons: this.getTransnationalData(
+            doc,
+            "Refugees and internally displaced persons",
+            "stateless persons"
+          ),
+        },
       });
     }
 
