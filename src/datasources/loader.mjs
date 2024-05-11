@@ -49,5 +49,3 @@ export async function load(client) {
     await client.close();
   }
 }
-
-// run().catch(console.dir);

@@ -1,6 +1,13 @@
 import { MongoClient } from "mongodb";
 import dotenv from "dotenv";
 import { load } from "./loader.mjs";
+import {
+  parseNumber,
+  cleanData,
+  cleanPercent,
+  cleanMetricTons,
+  removeCommas,
+} from "../utils/cleaningUtils.mjs";
 
 dotenv.config();
 
@@ -12,67 +19,6 @@ const client = new MongoClient(MONGO_URL, {
 
 await client.connect();
 // await load(client);
-
-const cleanData = (text) => {
-  if (!text) {
-    return "";
-  }
-  return text.split("(")[0].trim();
-};
-
-const cleanPercent = (text) => {
-  if (!text) {
-    return "";
-  }
-  return text.replace("%", "").trim();
-};
-
-const cleanMetricTons = (text) => {
-  if (!text) {
-    return "";
-  }
-  return text.replace("metric tons", "").trim();
-};
-
-const removeCommas = (text) => {
-  if (!text) {
-    return "";
-  }
-  return text.replace(/,/g, "");
-};
-
-const parseNumber = (str) => {
-  if (!str) return "";
-  if (str === "") return "";
-
-  let [num, unit] = str.split(" ");
-
-  num = parseFloat(num);
-
-  switch (unit?.toLowerCase()) {
-    case "trillion":
-      num *= 1e12;
-      break;
-    case "billion":
-      num *= 1e9;
-      break;
-    case "million":
-      num *= 1e6;
-      break;
-    case "thousand":
-      num *= 1e3;
-      break;
-    default:
-
-    // add more cases if needed
-  }
-
-  if (isNaN(num)) {
-    return "";
-  }
-
-  return num;
-};
 
 export class CountryAPI {
   constructor() {
