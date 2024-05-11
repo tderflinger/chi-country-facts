@@ -26,6 +26,13 @@ export const removeCommas = (text) => {
   return text.replace(/,/g, "");
 };
 
+export const removeDollars = (text) => {
+  if (!text) {
+    return "";
+  }
+  return text.replace(/\$/g, "");
+}
+
 export const parseNumber = (str) => {
   if (!str) return "";
   if (str === "") return "";

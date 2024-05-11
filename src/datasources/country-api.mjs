@@ -7,6 +7,7 @@ import {
   cleanPercent,
   cleanMetricTons,
   removeCommas,
+  removeDollars,
 } from "../utils/cleaningUtils.mjs";
 
 dotenv.config();
@@ -101,6 +102,10 @@ export class CountryAPI {
 
     // Print each document
     for await (const doc of cursor) {
+      if (!doc?.Government?.["Country name"]?.["conventional short form"]) {
+        continue;
+      }
+      
       let realGDP2021 = this.getEconomyData(
         doc,
         "Real GDP (purchasing power parity)",
@@ -128,7 +133,11 @@ export class CountryAPI {
       countries.push({
         name:
           doc?.Government?.["Country name"]?.["conventional short form"]
-            ?.text || "",
+            ?.text === "none"
+            ? doc?.Government?.["Country name"]?.["conventional long form"]
+                ?.text
+            : doc?.Government?.["Country name"]?.["conventional short form"]
+                ?.text || "",
         code: doc?.id,
         internetCountryCode:
           doc?.["Communications"]?.["Internet country code"]?.text || "",
@@ -225,7 +234,13 @@ export class CountryAPI {
             doc,
             "Population below poverty line"
           ),
-          budgetRevenues: this.getEconomyData(doc, "Budget", "revenues"),
+          budgetRevenues: parseNumber(
+            removeCommas(
+              removeDollars(
+                cleanData(this.getEconomyData(doc, "Budget", "revenues"))
+              )
+            )
+          ),
           budgetExpenditures: this.getEconomyData(
             doc,
             "Budget",
@@ -247,12 +262,24 @@ export class CountryAPI {
             "Current account balance",
             "Current account balance 2019"
           ),
-          exports2021: this.getEconomyData(doc, "Exports", "Exports 2021"),
+          exports2021: parseNumber(
+            removeCommas(
+              removeDollars(
+                cleanData(this.getEconomyData(doc, "Exports", "Exports 2021"))
+              )
+            )
+          ),
           exports2020: this.getEconomyData(doc, "Exports", "Exports 2020"),
           exports2019: this.getEconomyData(doc, "Exports", "Exports 2019"),
           exportsPartners: this.getEconomyData(doc, "Exports - partners"),
           exportsCommodities: this.getEconomyData(doc, "Exports - commodities"),
-          imports2021: this.getEconomyData(doc, "Imports", "Imports 2021"),
+          imports2021: parseNumber(
+            removeCommas(
+              removeDollars(
+                cleanData(this.getEconomyData(doc, "Imports", "Imports 2021"))
+              )
+            )
+          ),
           imports2020: this.getEconomyData(doc, "Imports", "Imports 2020"),
           imports2019: this.getEconomyData(doc, "Imports", "Imports 2019"),
           importsPartners: this.getEconomyData(doc, "Imports - partners"),
@@ -272,10 +299,18 @@ export class CountryAPI {
             "Reserves of foreign exchange and gold",
             "Reserves of foreign exchange and gold 31 December 2019"
           ),
-          debt2017: this.getEconomyData(
-            doc,
-            "Debt - external",
-            "Debt - external 31 December 2017"
+          debt2017: parseNumber(
+            removeCommas(
+              removeDollars(
+                cleanData(
+                  this.getEconomyData(
+                    doc,
+                    "Debt - external",
+                    "Debt - external 31 December 2017"
+                  )
+                )
+              )
+            )
           ),
           debt2016: this.getEconomyData(
             doc,
@@ -863,10 +898,8 @@ export class CountryAPI {
             )
           ),
           waterways: this.getTransportData(doc, "Waterways"),
-          merchantMarine: this.getTransportData(
-            doc,
-            "Merchant marine",
-            "total"
+          merchantMarine: removeCommas(
+            cleanData(this.getTransportData(doc, "Merchant marine", "total"))
           ),
           majorSeaports: this.getTransportData(
             doc,
