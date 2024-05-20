@@ -14,13 +14,46 @@ project as the source of the data.
 
 In Swahili, "nchi" means country. Since this project is about the facts of countries, we chose the name "chi-country-facts".
 
-## Preliminaries
+## Running
+
+There is a Docker image available on Docker Hub. You can run the application using the following docker-compose-prod.yml file:
+
+docker-compose-prod.yml:
+```yaml
+version: '3'
+services:
+  app:
+    image: tderflinger/chi-country-facts:0.1.0
+    ports:
+      - "4000:4000"
+    depends_on:
+      - db
+    environment:
+      - MONGO_URL=mongodb://db:27017/CountryFacts
+  db:
+    image: mongo:latest
+    volumes:
+      - mongodb_data:/data/db
+
+volumes:
+  mongodb_data: 
+```
+
+Run it with the following command:
+
+```bash
+docker compose -f ./docker-compose-prod.yml up
+```
+
+This will retrieve the image from Docker Hub and create a local Mongo DB database. Then you can access the Apollo GraphQL Sandbox via the following URL: [http://localhost:4000](http://localhost:4000).
+
+## Development
 
 Clone the [https://github.com/factbook/factbook.json](https://github.com/factbook/factbook.json) project into the same directory as this project.
 
-## Docker
+## Mongo DB Database
 
-There is a Docker Compose file in the project to run the GraphQL server together with the MongoDB database.
+There is a Docker Compose file (docker-compose.yml) in the project to run the GraphQL server together with the MongoDB database.
 
 Start with:
 
