@@ -1,5 +1,6 @@
 ![Chi logo](./docs/chi.png)
 
+![Chi screenshot](./docs/screenshot-chi.png)
 # chi-country-facts
 
 This projects takes the JSON data from the World Factbook and loads it into a MongoDB database.
@@ -16,7 +17,7 @@ In Swahili, "nchi" means country. Since this project is about the facts of count
 
 ## Running
 
-There is a Docker image available on Docker Hub. You can run the application using the following docker-compose-prod.yml file:
+There is a [Docker image available on Docker Hub](https://hub.docker.com/r/tderflinger/chi-country-facts). You can run the application using the following docker-compose-prod.yml file:
 
 docker-compose-prod.yml:
 ```yaml
