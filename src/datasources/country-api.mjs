@@ -19,7 +19,6 @@ const client = new MongoClient(MONGO_URL, {
 });
 
 await client.connect();
-// await load(client);
 
 export class CountryAPI {
   constructor() {
@@ -30,6 +29,10 @@ export class CountryAPI {
     await client.connect();
     const database = client.db("CountryFacts");
     this.collection = database.collection("countries");
+
+    if (this.collection.countDocuments() === 0) {
+      await load(client);
+    }
   }
 
   getEconomyData(doc, key, subKey) {
