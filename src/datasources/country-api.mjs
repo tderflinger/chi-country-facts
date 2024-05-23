@@ -30,7 +30,8 @@ export class CountryAPI {
     const database = client.db("CountryFacts");
     this.collection = database.collection("countries");
 
-    if (this.collection.countDocuments() === 0) {
+    if (await this.collection.countDocuments() === 0) {
+      console.log("Inside loading data to Mongo...")
       await load(client);
     }
   }
