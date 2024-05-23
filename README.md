@@ -24,7 +24,7 @@ docker-compose-prod.yml:
 version: '3'
 services:
   app:
-    image: tderflinger/chi-country-facts:0.1.0
+    image: tderflinger/chi-country-facts:0.3.0
     ports:
       - "4000:4000"
     depends_on:
